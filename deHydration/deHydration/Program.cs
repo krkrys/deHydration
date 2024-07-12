@@ -1,5 +1,8 @@
+using Application.Services;
+using Persistence.Context;
+using Persistence.Repository;
 
-namespace deHydration
+namespace Dehydration
 {
     public class Program
     {
@@ -13,7 +16,11 @@ namespace deHydration
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+            builder.Services.AddSingleton<IDapperContext, DapperContext>();
 
+            builder.Services.AddTransient<IPatientRepository, PatientRepository>();
+            builder.Services.AddSingleton<IPatientService, PatientService>();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
