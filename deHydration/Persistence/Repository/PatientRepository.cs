@@ -14,20 +14,18 @@ namespace Persistence.Repository
             _dapperContext = dapperContext;
         }
 
-        public async Task<Patient> GetByIdAsync(int id)
-        {
-            using var connection = _dapperContext.CreateConnection();
-            return await connection.QuerySingleOrDefaultAsync<Patient>("SELECT * FROM Patients WHERE Id = @Id", new { Id = id });
-
-        }
-        /*
         public async Task<IEnumerable<Patient>> GetAllAsync()
         {
             using var connection = _dapperContext.CreateConnection();
             return await connection.QueryAsync<Patient>("SELECT * FROM Patients");
         }
-        */
 
+        public async Task<Patient?> GetByIdAsync(int id)
+        {
+            using var connection = _dapperContext.CreateConnection();
+            return await connection.QuerySingleOrDefaultAsync<Patient?>("SELECT * FROM Patients WHERE PatientId = @Id", new { Id = id });
+        }
+        
         public async Task<int> AddAsync(Patient entity)
         {
             var sql = "INSERT INTO Patients (Name, Surname, PhoneNumber, StandardWeight) " +
@@ -38,16 +36,21 @@ namespace Persistence.Repository
             return id;
         }
 
-        /*
-        public bool Update(Patient model)
+        
+        public async Task<bool> UpdateAsync(Patient entity)
         {
-            throw new NotImplementedException();
+            var sql = "UPDATE Patients SET PhoneNumber=@PhoneNumber, StandardWeight=@StandardWeight WHERE PatientId = @PatientId";
+            using var connection = _dapperContext.CreateConnection();
+            var affectedRows = await connection.ExecuteAsync(sql, entity);
+            return affectedRows > 0;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            using var connection = _dapperContext.CreateConnection();
+            var affectedRows = await connection.ExecuteAsync("DELETE FROM Patients WHERE PatientId = @Id", new { Id = id });
+            return affectedRows > 0;
         }
-        */
+        
     }
 }

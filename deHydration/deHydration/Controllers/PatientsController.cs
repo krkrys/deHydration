@@ -2,6 +2,7 @@
 using Domain.Dto;
 using Domain.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DehydrationApp.Controllers
@@ -21,15 +22,20 @@ namespace DehydrationApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            //var invoices = await _patientService.GetAllAsync();
-            return Ok();
+            var patients = await _patientService.GetAll();
+            return Ok(patients);
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var patient = await _patientService.GetById(id);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+            return Ok(patient);
         }
         
 
@@ -40,19 +46,29 @@ namespace DehydrationApp.Controllers
             var createdPatient = await _patientService.Create(patientDto.Name, patientDto.Surname, patientDto.PhoneNumber, patientDto.StandardWeight);
             return Ok(createdPatient);
         }
-
-
-
+        
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, string phoneNumber, int standardWeight)
         {
+            var updatedPatient = await _patientService.Update(id, phoneNumber, standardWeight);
+            if (!updatedPatient)
+            {
+                return NotFound();
+            }
+            return Ok(updatedPatient);
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var result = await _patientService.DeleteById(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
         }
     }
 }
