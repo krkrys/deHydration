@@ -6,15 +6,15 @@ namespace Domain.Models
     public class Patient
     {
         
-        public int Id { get; }
+        public int PatientId { get; }
         public string Name { get; private set; }
         public string Surname { get; private set; }
         public string PhoneNumber { get; private set; }
         public int StandardWeight { get; private set; }
 
-        public Patient(int id, string name, string surname, string phoneNumber, int standardWeight)
+        public Patient(int patientId, string name, string surname, string phoneNumber, int standardWeight)
         {
-            Id = id;
+            PatientId = patientId;
             Name = name;
             Surname = surname;
             PhoneNumber = phoneNumber;
@@ -28,7 +28,17 @@ namespace Domain.Models
                 throw new ValidationException();
             }
 
-            return new Patient(2, name, surname, phoneNumber, standardWeight);
+            return new Patient(0, name, surname, phoneNumber, standardWeight);
+        }
+
+        public static Patient Update(int patientId, string phoneNumber, int standardWeight)
+        {
+            if (!Regex.Match(phoneNumber, @"^([0-9]{9})$").Success || standardWeight <= 0)
+            {
+                throw new ValidationException();
+            }
+
+            return new Patient(patientId, "a", "a", phoneNumber, standardWeight);
         }
     }
 }

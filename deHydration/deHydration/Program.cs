@@ -2,7 +2,7 @@ using Application.Services;
 using Persistence.Context;
 using Persistence.Repository;
 
-namespace Dehydration
+namespace DehydrationApp
 {
     public class Program
     {
@@ -20,7 +20,16 @@ namespace Dehydration
 
             builder.Services.AddTransient<IPatientRepository, PatientRepository>();
             builder.Services.AddSingleton<IPatientService, PatientService>();
-            
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                    builder.WithOrigins("http://localhost:5173")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -32,8 +41,9 @@ namespace Dehydration
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseCors("CorsPolicy");
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

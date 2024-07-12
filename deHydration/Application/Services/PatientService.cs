@@ -12,6 +12,34 @@ namespace Application.Services
             _repository = repository;
         }
 
+        public async Task<IEnumerable<Patient>> GetAll()
+        {
+            try
+            {
+                var patients = await _repository.GetAllAsync();
+
+                return patients;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<Patient?> GetById(int id)
+        {
+            try
+            {
+                var patient = await _repository.GetByIdAsync(id);
+
+                return patient;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public async Task<Patient?> Create(string name, string surname, string phoneNumber, int standardWeight)
         {
 
@@ -26,9 +54,39 @@ namespace Application.Services
             }
             catch (Exception ex)
             {
-                return null;
+                throw ex;
             }
-
         }
+
+        public async Task<bool> Update(int id, string phoneNumber, int standardWeight)
+        {
+
+            try
+            {
+                var updatedPatient = Patient.Update(id, phoneNumber, standardWeight);
+                var result = await _repository.UpdateAsync(updatedPatient);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> DeleteById(int id)
+        {
+            try
+            {
+                var result = await _repository.DeleteAsync(id);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
