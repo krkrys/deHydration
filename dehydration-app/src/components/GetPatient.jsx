@@ -4,7 +4,7 @@ import PatientTable from "./common/PatientTable.jsx";
 import {Button, Divider, InputNumber, Table, Typography} from "antd";
 const { Title, Text } = Typography;
 
-const GetPatient = () => {
+const GetPatient = ({sendDataToParent}) => {
     const [patient, setPatient] = useState();
     const [patientId, setPatientId] = useState();
     const [errorMessage, setErrorMessage] = useState('');
@@ -19,6 +19,7 @@ const GetPatient = () => {
                 return;
             }
             setPatient(data);
+            sendDataToParent(data);
             setErrorMessage('');
         } catch (err) {
             console.error('Błąd podczas pobierania danych pacjenta.', err);

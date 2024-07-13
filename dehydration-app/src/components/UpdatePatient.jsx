@@ -2,71 +2,38 @@ import {useState} from 'react';
 import {editPatient, getPatient} from "../api";
 import PatientTable from "./common/PatientTable.jsx";
 import {Button, Divider, Form, Input, InputNumber, Table, Typography} from "antd";
+import GetPatient from "./GetPatient.jsx";
 
 const {Title, Text} = Typography;
 
 const UpdatePatient = () => {
-    const [patient, setPatient] = useState();
-    const [patientId, setPatientId] = useState();
-    const [errorMessage, setErrorMessage] = useState('');
     const [message, setMessage] = useState('');
+    const [updateErrorMessage, setUpdateErrorMessage] = useState('');
+    const [dataFromChild, setDataFromChild] = useState("");
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const data = await getPatient(patientId);
-            if (!data) {
-                setErrorMessage('Pacjent o podanym ID nie istnieje.');
-                setPatient(null);
-                return;
-            }
-            setPatient(data);
-            setErrorMessage('');
-        } catch (err) {
-            console.error('Błąd podczas pobierania danych pacjenta.', err);
-            setErrorMessage('Pacjent o podanym ID nie istnieje.');
-            setPatient(null);
-        }
-    };
-    const datasrc = [];
-    datasrc.push(patient);
+    function handleDataFromChild(data) {
+        setDataFromChild(data);
+    }
 
     const handleEdit = async (e) => {
         try {
+            const patientId=dataFromChild.patientId;
             const data = await editPatient(patientId, e);
             if (!data) {
-                setErrorMessage('Nie udało się zmienić danych pacjenta');
+                setUpdateErrorMessage('Nie udało się zmienić danych pacjenta');
                 return;
             }
             setMessage(`Pacjent o ID ${patientId} został zmodyfikowany.`)
-            setErrorMessage('');
+            setUpdateErrorMessage('');
         } catch (err) {
             console.error('Błąd podczas dodawania pacjenta.', err);
             setMessage('')
-            setErrorMessage('Błąd podczas edycji danych pacjenta.');
+            setUpdateErrorMessage('Błąd podczas edycji danych pacjenta.');
         }
     };
     return (
         <>
-            <Title level={2}>Wybierz pacjenta do edycji</Title>
-            <form onSubmit={handleSubmit} className="form">
-                <InputNumber
-                    placeholder="Wpisz ID"
-                    min={1}
-                    value={patientId}
-                    onChange={value => {
-                        setPatientId(value)
-                    }}
-                />
-                <Button type="primary" htmlType="submit">Pobierz dane</Button>
-            </form>
-            <Divider/>
-            {errorMessage && <Text type="danger">{errorMessage}</Text>}
-            {patient && (
-                <Table columns={PatientTable.filter(col => col.key !== 'action')} dataSource={datasrc}
-                       rowKey="patientId"
-                       pagination={false}/>
-            )}
+            <GetPatient sendDataToParent={handleDataFromChild}/>
             <Title level={2}>Podaj dane pacjenta</Title>
             <Form
                 name="patient"
@@ -121,7 +88,7 @@ const UpdatePatient = () => {
                 </Form.Item>
             </Form>
             <Divider/>
-            {errorMessage && <Text type="danger">{errorMessage}</Text>}
+            {updateErrorMessage && <Text type="danger">{updateErrorMessage}</Text>}
             {message && <Text type="success">{message}</Text>}
         </>
     );
