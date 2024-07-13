@@ -1,4 +1,4 @@
-import {Space} from "antd";
+import DropdownMenu from "./ActionsMenu.jsx";
 
 const PatientTable = [
     {
@@ -22,14 +22,15 @@ const PatientTable = [
         key: 'phoneNumber',
     },
     {
+        title: 'Waga przed chorobą',
+        dataIndex: 'standardWeight',
+        key: 'standardWeight',
+    },
+    {
         title: 'Akcje',
         key: 'action',
         render: (_, record) => (
-            <Space size="middle">
-                <a>Dodaj wyniki</a>
-                <a>Pokaż wyniki</a>
-                <a>Usuń</a>
-            </Space>
+            <DropdownMenu />
         ),
     },
 ];

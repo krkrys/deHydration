@@ -21,7 +21,7 @@ const GetPatients = () => {
 
     return (
         //console.log(patients)
-        <Table columns={PatientTable} dataSource={patients} pagination={false}/>
+        <Table columns={PatientTable} dataSource={patients} rowKey="patientId" pagination={false}/>
     );
 };
 export default GetPatients;

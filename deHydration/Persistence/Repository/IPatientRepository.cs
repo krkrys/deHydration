@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Domain.Models;
+﻿using Domain.Models;
 
 namespace Persistence.Repository;
 

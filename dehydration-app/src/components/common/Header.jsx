@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Menu} from 'antd';
+import {Divider, Menu} from 'antd';
 import {useNavigate} from "react-router-dom";
 
 const items = [
@@ -9,7 +9,7 @@ const items = [
         children: [
             {
                 label: 'Dodaj pacjenta',
-                key: 'setting:1',
+                key: '/addpatient',
             },
             {
                 label: 'Wyszukaj pacjenta',
@@ -45,6 +45,10 @@ const Header = () => {
         setCurrent(e.key);
         navigate(e.key);
     };
-    return <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}/>;
+    return (
+        <>
+            <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal" items={items}/>
+            <Divider/>
+        </>)
 };
 export default Header;

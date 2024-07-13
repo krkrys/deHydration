@@ -1,8 +1,5 @@
 ﻿using Application.Services;
 using Domain.Dto;
-using Domain.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DehydrationApp.Controllers
@@ -49,9 +46,9 @@ namespace DehydrationApp.Controllers
         
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, string phoneNumber, int standardWeight)
+        public async Task<IActionResult> Put([FromBody] PatientUpdateDto patientUpdateDto, [FromRoute] int id)
         {
-            var updatedPatient = await _patientService.Update(id, phoneNumber, standardWeight);
+            var updatedPatient = await _patientService.Update(id, patientUpdateDto.PhoneNumber, patientUpdateDto.StandardWeight);
             if (!updatedPatient)
             {
                 return NotFound();

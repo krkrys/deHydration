@@ -1,5 +1,4 @@
 ﻿using Persistence.Context;
-using System.Data;
 using Dapper;
 using Domain.Models;
 
