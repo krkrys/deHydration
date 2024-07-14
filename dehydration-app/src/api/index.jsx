@@ -1,10 +1,27 @@
 const url = 'https://localhost:7066/api/Patients';
+const loginUrl = 'https://localhost:7066/api/Login';
+const token=localStorage.getItem('token');
+
+export const login = async (data) =>{
+    const response = await fetch(`${loginUrl}`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    if (!response.ok) {
+        throw new Error("Login failed");
+    }
+    return response.text();
+}
 
 export const getPatients = async () => {
     const response = await fetch(`${url}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
         },
     });
 
@@ -19,6 +36,7 @@ export const getPatient = async (patientId)=> {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
         },
     });
 
@@ -33,6 +51,7 @@ export const deletePatient = async (patientId)=> {
         method: "DELETE",
         headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
         },
     });
 
@@ -48,6 +67,7 @@ export const addPatient = async (formData) => {
         body: JSON.stringify(formData),
         headers: {
             'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
         }
     })
     if (!response.ok) {
@@ -62,6 +82,7 @@ export const editPatient = async (patientId,formData) => {
         body: JSON.stringify(formData),
         headers: {
             'Content-Type': 'application/json',
+            "Authorization": `Bearer ${token}`,
         }
     })
     if (!response.ok) {

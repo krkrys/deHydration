@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {getPatient} from "../api";
 import PatientTable from "./common/PatientTable.jsx";
 import {Button, Divider, InputNumber, Table, Typography} from "antd";
+import PropTypes from "prop-types";
 const { Title, Text } = Typography;
 
 const GetPatient = ({sendDataToParent}) => {
@@ -51,3 +52,7 @@ const GetPatient = ({sendDataToParent}) => {
 };
 
 export default GetPatient;
+
+GetPatient.propTypes = {
+    sendDataToParent: PropTypes.func,
+};

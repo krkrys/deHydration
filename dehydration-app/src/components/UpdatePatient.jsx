@@ -1,7 +1,6 @@
 import {useState} from 'react';
-import {editPatient, getPatient} from "../api";
-import PatientTable from "./common/PatientTable.jsx";
-import {Button, Divider, Form, Input, InputNumber, Table, Typography} from "antd";
+import {editPatient} from "../api";
+import {Button, Divider, Form, Input, InputNumber, Typography} from "antd";
 import GetPatient from "./GetPatient.jsx";
 
 const {Title, Text} = Typography;

@@ -40,12 +40,12 @@ namespace Application.Services
             }
         }
 
-        public async Task<Patient?> Create(string name, string surname, string phoneNumber, int standardWeight)
+        public async Task<Patient?> Create(string name, string surname, string phoneNumber, int standardWeight, int doctorId)
         {
 
             try
             {
-                var newPatient = Patient.Create(name, surname, phoneNumber, standardWeight);
+                var newPatient = Patient.Create(name, surname, phoneNumber, standardWeight, doctorId);
                 var id = await _repository.AddAsync(newPatient);
 
                 var patient = await _repository.GetByIdAsync(id);

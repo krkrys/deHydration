@@ -1,17 +1,18 @@
-﻿using Domain.Dto;
-using Domain.Models;
+﻿using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using DehydrationApp.Dto;
 using Persistence.Repository;
 
 namespace DehydrationApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
     public class LoginController : ControllerBase
     {
         private readonly IConfiguration _config;
@@ -24,7 +25,7 @@ namespace DehydrationApp.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult> Login(UserLoginDTO userLogin)
+        public async Task<ActionResult> Login(UserLoginDto userLogin)
         {
             var mapUser = new LoginModel()
             {
@@ -33,10 +34,9 @@ namespace DehydrationApp.Controllers
                 Role = ""
             };
             var user = await AuthenticateDb(mapUser);
-            //var user = Authenticate(mapUser);
+
             if (user != null)
             {
-                //var syncUser = await user;
                 var token = GenerateToken(user);
                 return Ok(token);
             }
@@ -51,7 +51,8 @@ namespace DehydrationApp.Controllers
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier,user.Username),
+                new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()), //tutaj UserID
+                new Claim(ClaimTypes.Name,user.Username),
                 new Claim(ClaimTypes.Role,user.Role)
             };
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
@@ -64,16 +65,6 @@ namespace DehydrationApp.Controllers
         }
 
         //To authenticate user
-        private LoginModel Authenticate(LoginModel userLogin)
-        {
-            var currentUser = UserConstants.Users.FirstOrDefault(x => x.Username.ToLower() ==
-                userLogin.Username.ToLower() && x.Password == userLogin.Password);
-            if (currentUser != null)
-            {
-                return currentUser;
-            }
-            return null;
-        }
 
         private async Task<LoginModel> AuthenticateDb(LoginModel userLogin)
         {
@@ -83,6 +74,7 @@ namespace DehydrationApp.Controllers
             {
                 var lModel = new LoginModel()
                 {
+                    Id=user.Id,
                     Username = user.Name,
                     Password = user.Password,
                     Role = "Admin"

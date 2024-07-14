@@ -60,9 +60,7 @@ namespace DehydrationApp
                     }
                 });
             });
-
-
-
+            
             builder.Services.AddSingleton<IDapperContext, DapperContext>();
             builder.Services.AddScoped<IRegisterRepository, RegisterRepository>();
             builder.Services.AddTransient<IPatientRepository, PatientRepository>();
@@ -79,7 +77,7 @@ namespace DehydrationApp
 
             var app = builder.Build();
 
-            /*if (app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 //app.UseExceptionHandler("/api/error");
@@ -87,7 +85,7 @@ namespace DehydrationApp
             else
             {
                 app.UseExceptionHandler("/api/error");
-            }*/
+            }
 
 
             // Configure the HTTP request pipeline.
