@@ -27,11 +27,27 @@ const items = [
         children: [
             {
                 label: 'Dodaj wyniki badań',
-                key: 'setting:4',
+                key: '/addexamination',
             },
             {
                 label: 'Wyszukaj badanie',
-                key: 'setting:5',
+                key: '/getexamination',
+            },
+            {
+                label: 'Edytuj wyniki badania',
+                key: '/updateexamination',
+            },
+            {
+                label: 'Usuń wyniki badania',
+                key: '/deleteexamination',
+            },
+            {
+                label: 'Pokaż wszystkie wyniki pacjenta',
+                key: '/patientexaminations',
+            },
+            {
+                label: 'Pokaż wszystkie wyniki',
+                key: '/getexaminations',
             }
         ]
     },
@@ -41,7 +57,6 @@ const Header = () => {
     const [current, setCurrent] = useState('');
     const navigate = useNavigate();
     const onClick = (e) => {
-        console.log('click ', e);
         setCurrent(e.key);
         navigate(e.key);
     };

@@ -1,5 +1,5 @@
 import {useState} from "react";
-import {addPatient} from "../api/index.jsx";
+import {addPatient} from "../api/patientApi.jsx";
 import {Button, Divider, Form, Input, InputNumber, Typography} from "antd";
 const { Title, Text } = Typography;
 

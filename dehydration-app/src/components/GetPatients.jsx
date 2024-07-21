@@ -1,10 +1,11 @@
-import {useEffect, useState} from 'react';
-import {getPatients} from "../api";
+import React, {useEffect, useState} from 'react';
+import {getPatients} from "../api/patientApi.jsx";
 import {Table} from "antd";
 import PatientTable from "./common/PatientTable.jsx";
 
 const GetPatients = () => {
     const [patients, setPatients] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -12,16 +13,14 @@ const GetPatients = () => {
                 const data = await getPatients();
                 setPatients(data);
             } catch (error) {
-                console.error('Błąd podczas pobierania promocji: ', error);
+                console.error('Błąd podczas pobierania pacjentów: ', error);
             }
         };
-
-        fetchData();
+        fetchData().finally(() => setIsLoading(false));
+        ;
     }, []);
 
-    return (
-        //console.log(patients)
-        <Table columns={PatientTable} dataSource={patients} rowKey="patientId" pagination={false}/>
-    );
+    return isLoading ? <p>loading...</p> : (
+        <Table columns={PatientTable} dataSource={patients} rowKey="patientId" pagination={false}/>);
 };
 export default GetPatients;

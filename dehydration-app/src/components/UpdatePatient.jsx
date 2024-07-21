@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {editPatient} from "../api";
+import {editPatient} from "../api/patientApi.jsx";
 import {Button, Divider, Form, Input, InputNumber, Typography} from "antd";
 import GetPatient from "./GetPatient.jsx";
 

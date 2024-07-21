@@ -1,45 +1,51 @@
-import {useState} from 'react';
-import {deletePatient} from "../api/patientApi.jsx";
+import React, {useState} from 'react';
 import {Button, Divider, InputNumber, Typography} from "antd";
+import {getExamination, getPatientExaminations} from "../api/examinationApi.jsx";
+import Examination from "./common/Examination.jsx";
 const { Title, Text } = Typography;
 
-const DeletePatient = () => {
+const GetPatientExaminations = () => {
+    const [examinations,setExaminations] = useState();
     const [patientId, setPatientId] = useState();
     const [errorMessage, setErrorMessage] = useState('');
-    const [message, setMessage] = useState('');
 
-    const handleClick = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = await deletePatient(patientId);
+            const data = await getPatientExaminations(patientId);
             if (!data) {
                 setErrorMessage('Pacjent o podanym ID nie istnieje.');
+                examinations(null);
                 return;
             }
-            setMessage(`Pacjent o ID ${patientId} został usunięty.`)
+            setExaminations(data);
             setErrorMessage('');
         } catch (err) {
-            console.error('Błąd podczas usuwania pacjenta.', err);
+            console.error('Błąd podczas pobierania danych badań.', err);
             setErrorMessage('Pacjent o podanym ID nie istnieje.');
+            setExaminations(null);
         }
     };
+
     return (
         <div>
-            <Title level={2}>Podaj ID pacjenta do usunięcia</Title>
-            <form onSubmit={handleClick} className="form">
+            <Title level={2}>Podaj ID pacjenta do pobrania badań</Title>
+            <form onSubmit={handleSubmit} className="form">
                 <InputNumber
                     placeholder="Wpisz ID"
                     min={1}
                     value={patientId}
                     onChange={value => {setPatientId(value)}}
                 />
-                <Button type="primary" htmlType="submit">Usuń</Button>
+                <Button type="primary" htmlType="submit">Pobierz dane badań</Button>
             </form>
             <Divider />
             {errorMessage && <Text type="danger">{errorMessage}</Text>}
-            {message && <Text type="success">{message}</Text>}
+            {examinations && (
+                <Examination props={examinations}/>
+            )}
         </div>
     );
 };
 
-export default DeletePatient;
+export default GetPatientExaminations;
