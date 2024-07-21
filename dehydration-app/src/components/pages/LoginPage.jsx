@@ -12,6 +12,7 @@ const LoginPage = () => {
 
     const onFinish = async (values) => {
         try {
+            localStorage.removeItem('token');
             const token = await login(values);
             setMessage('Zalogowano pomyślnie!');
             localStorage.setItem('token', token);
@@ -21,11 +22,12 @@ const LoginPage = () => {
             console.log(error);
             setMessage('Błąd logowania!');
         }
-
+        window.location.reload();
     };
 
-    const handleClick = () =>{
+    const handleClick = () => {
         localStorage.removeItem('token');
+        window.location.reload();
     }
 
     return (
@@ -47,7 +49,8 @@ const LoginPage = () => {
                         },
                     ]}
                 >
-                    <Input prefix={<UserOutlined className="site-form-item-icon"/>} placeholder="Nazwa użytkownika"/>
+                    <Input prefix={<UserOutlined className="site-form-item-icon"/>}
+                           placeholder="Nazwa użytkownika"/>
                 </Form.Item>
                 <Form.Item
                     name="password"
@@ -75,6 +78,7 @@ const LoginPage = () => {
                 Wyloguj
             </Button>
         </>
-    );
+    )
+        ;
 };
 export default LoginPage;
