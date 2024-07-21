@@ -1,3 +1,24 @@
+CREATE DATABASE Dehydration;
+GO
+USE Dehydration;
+GO
+CREATE TABLE Users
+(
+	Id INT IDENTITY PRIMARY KEY,
+	Name NVARCHAR(100) NOT NULL,
+	Email NVARCHAR(100) NOT NULL,
+	Password NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Patients(
+	PatientId int IDENTITY PRIMARY KEY,
+	Name nvarchar(100) NOT NULL,
+	Surname nvarchar(100) NOT NULL,
+	PhoneNumber nvarchar(9) NOT NULL,
+	StandardWeight int NOT NULL,
+	DoctorId int NOT NULL FOREIGN KEY REFERENCES Users(Id)
+	);
+
 CREATE TABLE Examinations
 (
     ExaminationId INT IDENTITY PRIMARY KEY,
@@ -7,13 +28,11 @@ CREATE TABLE Examinations
     BodyTemperature FLOAT NOT NULL,
     Vomit INT NOT NULL,
     Stool INT NOT NULL
-	)
+);
 
-	;
-
-	CREATE TABLE Symptoms
+CREATE TABLE Symptoms
 (
-    ExaminationId INT FOREIGN KEY REFERENCES Examinations(ExaminationId),
+    ExaminationId INT NOT NULL FOREIGN KEY REFERENCES Examinations(ExaminationId),
     GeneralAppearance INT NOT NULL CHECK (GeneralAppearance between 1 and 3),
     RadialPulse INT NOT NULL CHECK (RadialPulse between 1 and 3),
     Respirations INT NOT NULL CHECK (Respirations between 1 and 3),
