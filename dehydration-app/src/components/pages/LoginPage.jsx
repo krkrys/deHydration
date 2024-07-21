@@ -17,12 +17,12 @@ const LoginPage = () => {
             setMessage('Zalogowano pomyślnie!');
             localStorage.setItem('token', token);
             navigate('/main');
+            window.location.reload();
 
         } catch (error) {
             console.log(error);
             setMessage('Błąd logowania!');
         }
-        window.location.reload();
     };
 
     const handleClick = () => {

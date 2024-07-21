@@ -46,8 +46,11 @@ namespace Persistence.Repository
 
         public async Task<bool> DeleteAsync(int id)
         {
+            var sql = @"DELETE FROM Symptoms WHERE ExaminationId IN (SELECT DISTINCT ExaminationId FROM Examinations WHERE PatientId=@Id);
+DELETE FROM Examinations WHERE PatientId=@Id;
+DELETE FROM Patients WHERE PatientId = @Id;";
             using var connection = _dapperContext.CreateConnection();
-            var affectedRows = await connection.ExecuteAsync("DELETE FROM Patients WHERE PatientId = @Id", new { Id = id });
+            var affectedRows = await connection.ExecuteAsync(sql, new { Id = id });
             return affectedRows > 0;
         }
         
