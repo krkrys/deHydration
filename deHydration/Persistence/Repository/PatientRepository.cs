@@ -16,7 +16,7 @@ namespace Persistence.Repository
         public async Task<IEnumerable<Patient>> GetAllAsync()
         {
             using var connection = _dapperContext.CreateConnection();
-            return await connection.QueryAsync<Patient>("SELECT * FROM Patients");
+            return await connection.QueryAsync<Patient>("SELECT * FROM Patients Order by PatientId");
         }
 
         public async Task<Patient?> GetByIdAsync(int id)

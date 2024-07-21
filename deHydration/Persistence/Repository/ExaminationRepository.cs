@@ -21,7 +21,7 @@ namespace Persistence.Repository
         public async Task<IEnumerable<Examination>> GetAllAsync()
         {
             using var connection = _dapperContext.CreateConnection();
-            var sql = "SELECT e.*, s.* FROM Examinations e join Symptoms s on e.ExaminationId= s.ExaminationId";
+            var sql = "SELECT e.*, s.* FROM Examinations e join Symptoms s on e.ExaminationId= s.ExaminationId Order by e.PatientId, e.ExaminationId";
             var result = await connection.QueryAsync<Examination, Symptoms, Examination>
             (sql, map: (e, s) => { e.Symptoms = s; return e; }, splitOn: "GeneralAppearance");
             return result;
@@ -41,7 +41,7 @@ namespace Persistence.Repository
         {
             using var connection = _dapperContext.CreateConnection();
             var sql =
-                "SELECT e.*, s.* FROM Examinations e join Symptoms s on e.ExaminationId= s.ExaminationId WHERE e.PatientId = @Id";
+                "SELECT e.*, s.* FROM Examinations e join Symptoms s on e.ExaminationId= s.ExaminationId WHERE e.PatientId = @Id Order by e.ExaminationId";
             var result = await connection.QueryAsync<Examination, Symptoms, Examination>
             (sql, map: (e, s) => { e.Symptoms = s; return e; }, splitOn: "GeneralAppearance",
                 param: new { Id = id });
