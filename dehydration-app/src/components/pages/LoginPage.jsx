@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {LockOutlined, UserOutlined} from '@ant-design/icons';
 import {Button, Form, Input, Typography} from 'antd';
-import {login} from "../../api/index.jsx";
+import {login} from "../../api/loginApi.jsx";
 import {useNavigate} from 'react-router-dom';
 
 const {Text} = Typography;
@@ -13,11 +13,8 @@ const LoginPage = () => {
     const onFinish = async (values) => {
         try {
             const token = await login(values);
-            console.log(token);
             setMessage('Zalogowano pomyślnie!');
             localStorage.setItem('token', token);
-            const token2 = localStorage.getItem('token');
-            console.log(token2)
             navigate('/main');
 
         } catch (error) {

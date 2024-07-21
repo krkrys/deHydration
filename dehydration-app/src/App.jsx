@@ -9,6 +9,12 @@ import AddPatient from "./components/AddPatient.jsx";
 import UpdatePatient from "./components/UpdatePatient.jsx";
 import LoginPage from "./components/pages/LoginPage.jsx";
 import {useEffect, useState} from "react";
+import GetExaminations from "./components/GetExaminations.jsx";
+import AddExamination from "./components/AddExamination.jsx";
+import GetExamination from "./components/GetExamination.jsx";
+import GetPatientExaminations from "./components/GetPatientExaminations.jsx";
+import UpdateExamination from "./components/UpdateExamination.jsx";
+import DeleteExamination from "./components/DeleteExamination.jsx";
 
 function emptyFunction() {}
 
@@ -17,7 +23,6 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token')
-        console.log(token);
         if(token) {
             setIsAuthenticated(true);
         }
@@ -37,6 +42,12 @@ function App() {
                             <Route path='/deletepatient' element={<DeletePatient/>}/>
                             <Route path='/addpatient' element={<AddPatient/>}/>
                             <Route path='/updatepatient' element={<UpdatePatient/>}/>
+                            <Route path='/getexaminations' element={<GetExaminations/>}/>
+                            <Route path='/addexamination' element={<AddExamination/>}/>
+                            <Route path='/getexamination' element={<GetExamination/>}/>
+                            <Route path='/patientexaminations' element={<GetPatientExaminations/>}/>
+                            <Route path='/updateexamination' element={<UpdateExamination/>}/>
+                            <Route path='/deleteexamination' element={<DeleteExamination/>}/>
                         </>
                     ) : (
                         <Route path="*" element={<LoginPage/>}/>

@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {getPatient} from "../api";
+import {getPatient} from "../api/patientApi.jsx";
 import PatientTable from "./common/PatientTable.jsx";
 import {Button, Divider, InputNumber, Table, Typography} from "antd";
 import PropTypes from "prop-types";
