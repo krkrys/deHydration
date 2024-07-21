@@ -65,6 +65,9 @@ namespace DehydrationApp
             builder.Services.AddScoped<IRegisterRepository, RegisterRepository>();
             builder.Services.AddTransient<IPatientRepository, PatientRepository>();
             builder.Services.AddSingleton<IPatientService, PatientService>();
+            builder.Services.AddTransient<IExaminationRepository, ExaminationRepository>();
+            builder.Services.AddSingleton<IExaminationService, ExaminationService>();
+            builder.Services.AddSingleton<ICalculationService, CalculationService>();
 
             builder.Services.AddCors(options =>
             {
