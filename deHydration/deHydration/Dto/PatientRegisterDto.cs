@@ -16,13 +16,13 @@ namespace DehydrationApp.Dto
         [Required]
         public int DoctorId { get; private set; }
 
-        public PatientRegisterDto(string name, string surname, string phoneNumber, int standardWeight, int doctorId)
+        public PatientRegisterDto(string name, string surname, string phoneNumber, int standardWeight)
         {
             Name = name;
             Surname = surname;
             PhoneNumber = phoneNumber;
             StandardWeight = standardWeight;
-            DoctorId = doctorId;
+            
         }
     }
 }
