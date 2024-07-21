@@ -27,8 +27,8 @@ namespace Persistence.Repository
         
         public async Task<int> AddAsync(Patient entity)
         {
-            var sql = "INSERT INTO Patients (Name, Surname, PhoneNumber, StandardWeight) " +
-                      "VALUES (@Name, @Surname, @PhoneNumber, @StandardWeight); " +
+            var sql = "INSERT INTO Patients (Name, Surname, PhoneNumber, StandardWeight, DoctorId) " +
+                      "VALUES (@Name, @Surname, @PhoneNumber, @StandardWeight, @DoctorId); " +
                       "SELECT CAST(SCOPE_IDENTITY() AS int) ";
             using var connection = _dapperContext.CreateConnection();
             var id = await connection.QuerySingleAsync<int>(sql, entity);

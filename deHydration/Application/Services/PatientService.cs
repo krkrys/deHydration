@@ -74,7 +74,7 @@ namespace Application.Services
             }
         }
 
-        public async Task<bool> DeleteById(int id)
+        public async Task<bool> Delete(int id)
         {
             try
             {

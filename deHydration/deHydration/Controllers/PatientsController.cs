@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using DehydrationApp.Dto;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Collections.Generic;
 
 namespace DehydrationApp.Controllers
 {
@@ -20,7 +18,7 @@ namespace DehydrationApp.Controllers
         {
             _patientService = patientService;
         }
-        
+
         // GET: api/<UsersController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
@@ -36,32 +34,40 @@ namespace DehydrationApp.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
+            var currentUser = GetCurrentUser();
             var patient = await _patientService.GetById(id);
-            if (patient == null)
+            if (patient == null || patient.DoctorId != currentUser.Id)
             {
                 return NotFound();
             }
-            return Ok(patient);
+            return Ok(PatientShowDto.Create(patient));
         }
-        
+
 
         // POST api/<UsersController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] PatientRegisterDto patientRegisterDtoDto)
+        public async Task<IActionResult> Post([FromBody] PatientRegisterDto patientRegisterDto)
         {
-            var createdPatient = await _patientService.Create(patientRegisterDtoDto.Name, patientRegisterDtoDto.Surname, patientRegisterDtoDto.PhoneNumber, patientRegisterDtoDto.StandardWeight, patientRegisterDtoDto.DoctorId);
+            var currentUser = GetCurrentUser();
+            var createdPatient = await _patientService.Create(patientRegisterDto.Name, patientRegisterDto.Surname, patientRegisterDto.PhoneNumber, patientRegisterDto.StandardWeight, currentUser.Id);
             return Ok(createdPatient);
         }
-        
+
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromBody] PatientUpdateDto patientUpdateDto, [FromRoute] int id)
         {
-            var updatedPatient = await _patientService.Update(id, patientUpdateDto.PhoneNumber, patientUpdateDto.StandardWeight);
+            var currentUser = GetCurrentUser();
+            var patient = await _patientService.GetById(id);
+            if (patient == null || currentUser.Id != patient.DoctorId) return NotFound();
+            var updatedPatient =
+                await _patientService.Update(id, patientUpdateDto.PhoneNumber, patientUpdateDto.StandardWeight);
+
             if (!updatedPatient)
             {
                 return NotFound();
             }
+
             return Ok(updatedPatient);
         }
 
@@ -69,7 +75,11 @@ namespace DehydrationApp.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _patientService.DeleteById(id);
+            var currentUser = GetCurrentUser();
+            var patient = await _patientService.GetById(id);
+            if (patient == null || currentUser.Id != patient.DoctorId) return NotFound();
+            var result = await _patientService.Delete(id);
+
             if (!result)
             {
                 return NotFound();
